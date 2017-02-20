@@ -10,9 +10,10 @@ $ webpack-dev-server
 ---
 ## DEMO
 
-### 1. [散佈圖](https://javaok1987.github.io/d3-drill/scatterplot.html) ###
+1.  Scatter plot [demo](https://javaok1987.github.io/d3-drill/scatterplot.html)    
+![Alt text](/img/scatterplot.png "scatter plot")
 
-![Alt text](/img/scatterplot.png "散佈圖")
 
-### 2. [折線圖散佈圖](http://example.net/) ###
-![Alt text](https://javaok1987.github.io/d3-drill/linechart.html "折線圖")
+
+2.  Line graph [demo](https://javaok1987.github.io/d3-drill/linechart.html)    
+![Alt text](/img/linechart.png "line graph")
