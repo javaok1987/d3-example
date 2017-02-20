@@ -96,7 +96,7 @@ var tooltip = d3.select('body').append('div').attr('class', 'tooltip');
 
 var linePath, circles;
 // Get the data
-d3.csv('../data.csv', function (error, data) {
+d3.csv('./data/data.csv', function (error, data) {
     console.debug(JSON.stringify(data));
     if (error) throw error;
 
