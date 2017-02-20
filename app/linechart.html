@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>折線圖</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        /* SVG styling */
+        
+        svg {
+            margin: 50px;
+        }
+        
+        .xAxis path,
+        .yAxis path,
+        .xAxis line,
+        .yAxis line {
+            fill: none;
+            stroke: #FFCC33;
+            stroke-width: 3px;
+            z-index: 2;
+        }
+        
+        .xAxis-grid path,
+        .xAxis-grid line,
+        .yAxis-grid path,
+        .yAxis-grid line {
+            fill: none;
+            stroke: #ddd;
+            stroke-width: 1px;
+            z-index: 1;
+        }
+        
+        text {
+            font-size: 12px;
+            fill: #888;
+        }
+        
+        .line {
+            fill: none;
+            stroke: #D53F52;
+            stroke-width: 2px;
+        }
+        
+        .outerline {
+            fill: none;
+            stroke: #FFCC33;
+            stroke-width: 3px;
+        }
+    </style>
+    <!-- load the d3.js library -->
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.min.js"></script>
+    <!--<script src="https://d3js.org/d3-ease.v1.min.js"></script>-->
+</head>
+
+<body>
+    <script type="text/javascript" src="./js/bundle-linechart.js"></script>
+</body>
+
+</html>
