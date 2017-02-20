@@ -60,24 +60,30 @@ var setPathAnimation = function (path) {
 // appends a 'group' element to 'svg'
 // moves the 'group' element to the top left margin
 var svg = d3.select('body').append('svg')
-    .attr('width', width + margin.left + margin.right + skew / 2)
-    .attr('height', height + margin.top + margin.bottom)
+    .attrs({
+        width: width + margin.left + margin.right + skew / 2,
+        height: height + margin.top + margin.bottom
+    })
     .append('g')
     .attr('transform', 'translate(' + (margin.left + skew / 2) + ',' + margin.top + ')');
 
 // set thhe background color
 svg.append('rect')
-    .attr('x', -skew - 4)
-    .attr('y', -4)
-    .attr('fill', '#F2F2F2')
-    .attr('width', width + margin.left)
-    .attr('height', height + 8);
+    .attrs({
+        x: (-skew - 4),
+        y: -4,
+        fill: '#F2F2F2',
+        width: width + margin.left,
+        height: height + 8
+    })
 
 svg.append('rect')
-    .attr('x', -skew)
-    .attr('fill', '#FFF')
-    .attr('width', width + skew)
-    .attr('height', height);
+    .attrs({
+        x: -skew,
+        fill: '#FFF',
+        width: width + skew,
+        height: height
+    });
 
 var xAxis = d3.axisBottom(scaleX).tickFormat(function (d) {
     return formatMonth(d);
@@ -85,6 +91,8 @@ var xAxis = d3.axisBottom(scaleX).tickFormat(function (d) {
 
 var yAxis = d3.axisLeft(scaleY).tickValues([30, 40, 50, 60, 70, 80, 90])
     .tickSize(-width - skew, 0).tickPadding(8);
+
+var tooltip = d3.select('body').append('div').attr('class', 'tooltip');
 
 var linePath, circles;
 // Get the data
@@ -107,7 +115,6 @@ d3.csv('../data.csv', function (error, data) {
     // Add the X Axis
     svg.append('g')
         .attr('class', 'xAxis-grid')
-        // .attr('transform', 'translate(-23,' + height + ')')
         .style('text-anchor', 'middle')
         .call(xAxis)
         .attr('transform', 'translate(0,' + height + ')')
@@ -124,21 +131,27 @@ d3.csv('../data.csv', function (error, data) {
                 y: height
             }]
         ])
-        .attr('class', 'outerline')
-        .attr('d', outerline);
+        .attrs({
+            class: 'outerline',
+            d: outerline
+        });
 
     // Add the Y Axis
     svg.append('g')
-        .attr('class', 'yAxis-grid')
-        .attr('transform', 'translate(-43,0)')
+        .attrs({
+            class: 'yAxis-grid',
+            transform: 'translate(-43,0)'
+        })
         .call(yAxis);
 
     // text label for the y axis
     svg.append('text')
-        .attr('y', -20)
-        .attr('x', 0)
-        .attr('dy', '1em')
-        .attr('dx', -45)
+        .attrs({
+            x: 0,
+            y: -20,
+            dx: -45,
+            dy: '1em'
+        })
         .style('text-anchor', 'middle')
         .text('單價/萬');
 
@@ -181,7 +194,25 @@ d3.csv('../data.csv', function (error, data) {
             fill: '#fff',
             stroke: '#D53F52',
             'stroke-width': '2px'
+        })
+        .on('mouseover', function (d) {
+            d3.select(this).attr('stroke-width', '4px');
+            tooltip.transition()
+                .duration(200)
+                .style('opacity', .9);
+            tooltip.html('月份：' + formatMonth(d.month) + ' </br>單價：' + d.price + '/萬')
+                .style('left', (d3.event.pageX) + 'px')
+                .style('top', (d3.event.pageY - 28) + 'px');
+            tooltip.style('display', 'block');
+        })
+        .on('mousemove', function (d) {
+            tooltip.style('top', d3.event.pageY - 15 + 'px').style('left', d3.event.pageX + 15 + 'px');
+        })
+        .on('mouseout', function (d) {
+            d3.select(this).attr('stroke-width', '2px');
+            tooltip.style('display', 'none');
         });
+
 
     setPathAnimation(path);
     var i = 0;

@@ -48,6 +48,21 @@
             stroke: #FFCC33;
             stroke-width: 3px;
         }
+        
+        div.tooltip {
+            position: absolute;
+            display: none;
+            width: auto;
+            height: auto;
+            overflow: hidden;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid #aaa;
+            border-radius: 2px;
+            padding: 9px;
+            font-size: 14px;
+            z-index: 20;
+            box-shadow: 1px 1px 1px 1px #ddd
+        }
     </style>
     <!-- load the d3.js library -->
     <script src="https://d3js.org/d3.v4.min.js"></script>

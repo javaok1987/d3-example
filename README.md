@@ -11,7 +11,7 @@ $ webpack-dev-server
 ## DEMO
 
 ### 1. 散佈圖 ###
-<img src="./img/scatterplot.png" alt="散佈圖" style="width: 400px;"/>
+![Alt text](/img/scatterplot.png "散佈圖")
 
 ### 2. 折線圖 ###
-<img src="./img/linechart.png" alt="散佈圖" style="width: 400px;"/>
+![Alt text](/img/linechart.png "折線圖")
