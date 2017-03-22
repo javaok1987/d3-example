@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>台北捷運</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+     :root {
+      --blue-color: #0070BC;
+    }
+
+    .node circle {
+      fill: var(--blue-color);
+      stroke: var(--blue-color);
+      stroke-width: 3px;
+    }
+
+    .node text {
+      font: 12px sans-serif;
+    }
+
+    .node--internal text {
+      text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
+    }
+
+    .link {
+      fill: none;
+      stroke: var(--blue-color);
+      stroke-width: 3px;
+    }
+  </style>
+  <!-- load the d3.js library -->
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+
+<body>
+  <svg>
+    <text x="90" y="30" fill="#0070bc">板南線</text>
+  </svg>
+  <script type="text/javascript" src="./js/bundle-metro.js"></script>
+</body>
+
+</html>
