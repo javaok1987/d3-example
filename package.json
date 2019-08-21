@@ -10,7 +10,8 @@
   "author": "Ian Liao",
   "license": "ISC",
   "devDependencies": {
-    "webpack": "^2.7.0",
-    "webpack-dev-server": "^2.11.5"
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.7",
+    "webpack-dev-server": "^3.8.0"
   }
 }
