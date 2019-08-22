@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>長條圖</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .chart .is-hover .bar {
+            fill: #6a6;
+        }
+
+        .chart .is-hover .bar-line {
+            stroke: #6a6;
+        }
+
+        .chart .bar {
+            cursor: pointer;
+            fill: #fc3;
+            stroke: none;
+        }
+
+        .chart .bar-group {
+            cursor: pointer;
+            fill: transparent;
+        }
+
+        .chart .bar-line {
+            stroke: none;
+            stroke-dasharray: 3;
+        }
+
+        .chart .bar-text,
+        .chart .bar-axis {
+            font-family: sans-serif;
+            font-size: 13px;
+            text-anchor: start;
+            fill: #555;
+        }
+
+        .chart .axis-style line {
+            stroke-width: 0;
+        }
+
+        .chart .axis-style path {
+            stroke-width: 0;
+        }
+
+        .chart .axis-style text {
+            font-size: 13px;
+            fill: #555;
+        }
+
+        .chart .domain {
+            stroke: #fc3;
+            stroke-width: 3px;
+        }
+
+        .chart .grid text {
+            font-size: 0;
+        }
+
+        .chart .grid .domain {
+            stroke-width: 0;
+        }
+
+        .chart .grid line {
+            stroke: #ccc;
+            stroke-width: 1px;
+        }
+
+        .chart .grid.is-hide {
+            opacity: 0;
+        }
+
+        .d3-tip {
+            line-height: 1.3;
+            padding: 10px;
+            color: #fff;
+            border-radius: 3px;
+            background-color: #6a6;
+            z-index: -1;
+        }
+
+        .d3-tip:after {
+            font-size: 16px;
+            line-height: 1;
+            position: absolute;
+            top: 0;
+            display: inline-block;
+            box-sizing: border-box;
+            width: 20px;
+            content: '\25BC';
+            text-align: center;
+            color: #6a6;
+        }
+
+        .d3-tip.n:after {
+            top: 100%;
+            left: 40%;
+            margin: -3px 0 0 0;
+        }
+    </style>
+    <!-- load the d3.js library -->
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.min.js"></script>
+</head>
+
+<body>
+    <script type="text/javascript" src="./js/bundle-barchart.js"></script>
+</body>
+
+</html>
