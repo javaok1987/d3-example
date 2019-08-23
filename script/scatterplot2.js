@@ -7,17 +7,17 @@ for (var i = 0; i < 10; i++) {
   dataset.push({
     idx: i,
     date: ['2019-08-01', '2019-08-31'],
-    address: `中央路${random(1, 5)}段`,
-    value: [{ queue: random(1, 100), flow: random(30, 80) }, { queue: random(1, 100), flow: random(30, 80) }],
+    address: `羅斯福路${random(1, 5)}段`,
+    value: [{ queue: random(5, 100), flow: random(30, 80) }, { queue: random(5, 100), flow: random(30, 80) }],
   });
 }
 console.log('dataset', dataset);
 
 // set the dimensions and margins of the graph
 const margin = {
-    top: 20,
-    right: 20,
-    bottom: 30,
+    top: 30,
+    right: 30,
+    bottom: 50,
     left: 50,
   },
   width = 500 - margin.left - margin.right,
@@ -28,25 +28,31 @@ const colorsScale = d3.schemeSet2;
 const svg = d3
   .select('body')
   .append('svg')
-  .attr('width', width + margin.left + margin.right)
-  .attr('height', height + margin.top + margin.bottom)
+  .attrs({
+    width: width + margin.left + margin.right,
+    height: height + margin.top + margin.bottom,
+  })
   .append('g')
   .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
 // set thhe background color
 svg
   .append('rect')
-  .attr('x', -4)
-  .attr('y', -4)
-  .attr('fill', '#F2F2F2')
-  .attr('width', width + 8)
-  .attr('height', height + 8);
+  .attrs({
+    x: -4,
+    y: -4,
+  })
+  .styles({
+    fill: '#F2F2F2',
+    width: width + 8,
+    height: height + 8,
+  });
 
-svg
-  .append('rect')
-  .attr('fill', '#FFF')
-  .attr('width', width)
-  .attr('height', height);
+svg.append('rect').attrs({
+  fill: '#FFF',
+  width: width,
+  height: height,
+});
 
 // set the ranges
 const scaleX = d3.scaleLinear().range([0, width]);
@@ -76,19 +82,6 @@ scaleX.domain([xGroupMin - 5, xGroupMax + 5]);
 scaleY.domain([0, 100]);
 
 // Add the grid
-// svg
-//   .append('g')
-//   .attr('class', 'xAxis-grid')
-//   .attr('transform', 'translate(0,' + height + ')')
-//   .call(
-//     d3
-//       .axisBottom(scaleX)
-//       .ticks(4)
-//       .tickFormat('')
-//       .tickSize(-height, 0)
-//   );
-
-// Add the grid
 svg
   .append('g')
   .attr('class', 'yAxis-grid')
@@ -103,10 +96,17 @@ svg
 // Add the X Axis
 svg
   .append('g')
-  .attr('class', 'xAxis')
-  .attr('transform', 'translate(0,' + height + ')')
+  .attrs({
+    class: 'xAxis',
+    transform: 'translate(0,' + height + ')',
+  })
   .style('text-anchor', 'middle')
-  .call(d3.axisBottom(scaleX).ticks(0));
+  .call(
+    d3
+      .axisBottom(scaleX)
+      .ticks(0)
+      .tickSizeOuter(0)
+  );
 
 // text label for the x axis
 svg
@@ -130,9 +130,10 @@ svg
 // text label for the y axis
 svg
   .append('text')
-  .attr('y', 0)
-  .attr('x', -margin.right)
-  .attr('dy', '1em')
+  .attrs({
+    x: -margin.right,
+    y: '-1rem',
+  })
   .style('text-anchor', 'middle')
   .text('Queue');
 
@@ -155,16 +156,20 @@ svg
 svg
   .append('svg:defs')
   .append('svg:marker')
-  .attr('id', 'icon-arrow--active')
-  .attr('refX', 20)
-  .attr('refY', 6)
-  .attr('markerWidth', 30)
-  .attr('markerHeight', 30)
-  .attr('markerUnits', 'userSpaceOnUse')
-  .attr('orient', 'auto')
+  .attrs({
+    refX: 20,
+    refY: 6,
+    markerWidth: 30,
+    markerHeight: 30,
+    markerUnits: 'userSpaceOnUse',
+    orient: 'auto',
+  })
+  .properties({
+    id: 'icon-arrow--active',
+  })
   .append('path')
   .attr('d', 'M 0 0 12 6 0 12 3 6')
-  .style('fill', '#409EFF');
+  .style('fill', '#fc8d62');
 
 //line
 svg
@@ -172,20 +177,22 @@ svg
   .data(dataset)
   .enter()
   .append('line')
-  .attr('class', 'arrow-line')
-  .attr('x1', function(d) {
-    return scaleX(+d.value[0].flow);
+  .attrs({
+    x1: function(d) {
+      return scaleX(+d.value[0].flow);
+    },
+    y1: function(d) {
+      return scaleY(+d.value[0].queue);
+    },
+    x2: function(d) {
+      return scaleX(+d.value[1].flow);
+    },
+    y2: function(d) {
+      return scaleY(+d.value[1].queue);
+    },
+    'marker-end': 'url(#icon-arrow)',
+    class: 'arrow-line',
   })
-  .attr('y1', function(d) {
-    return scaleY(+d.value[0].queue);
-  })
-  .attr('x2', function(d) {
-    return scaleX(+d.value[1].flow);
-  })
-  .attr('y2', function(d) {
-    return scaleY(+d.value[1].queue);
-  })
-  .attr('marker-end', 'url(#icon-arrow)')
   .on('mouseover', handleMouseOver)
   .on('mouseout', handleMouseOut)
   .on('mousemove', function(d) {
@@ -198,6 +205,7 @@ const date1_dot = svg
   .data(dataset)
   .enter()
   .append('g');
+
 date1_dot.append('circle').attrs({
   cx: function(d) {
     return scaleX(+d.value[0].flow);
