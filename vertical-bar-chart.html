@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vertical Bar Chart</title>
+    <style>
+        /* Style the lines by removing the fill and applying a stroke */
+        .line {
+            fill: none;
+            stroke: #ffab00;
+            stroke-width: 3;
+        }
+
+        .overlay {
+            fill: none;
+            pointer-events: all;
+        }
+
+        /* Style the dots by assigning a fill and stroke */
+        .dot {
+            fill: #ffab00;
+            stroke: #fff;
+        }
+
+        .focus circle {
+            fill: none;
+            stroke: steelblue;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.min.js"></script>
+    <script>
+        // Set the dimensions and margins of the graph.
+        const margin = {
+            top: 60,
+            right: 30,
+            bottom: 50,
+            left: 50
+        };
+        const width = 600 - margin.left - margin.right;
+        const height = 450 - margin.top - margin.bottom;
+
+        const handleMouseOver = function (d, i) {
+            console.log('handleMouseOver');
+            const $d = d3.select(this);
+            $d.attrs({
+                fill: 'none',
+                stroke: 'steelblue'
+            });
+        };
+
+        const handleMouseOut = function (d, i) {
+            const $d = d3.select(this);
+            $d.attrs({
+                fill: '#62bfaa'
+            });
+        };
+        const dataSet = [
+            { hours: '5', transfer_volume: '2', transfer_time: 10 },
+            { hours: '6', transfer_volume: '39', transfer_time: 10 },
+            { hours: '7', transfer_volume: '562', transfer_time: 13 },
+            { hours: '8', transfer_volume: '1025', transfer_time: 13 },
+            { hours: '9', transfer_volume: '1413', transfer_time: 15 },
+            { hours: '10', transfer_volume: '1405', transfer_time: 18 },
+            { hours: '11', transfer_volume: '1337', transfer_time: 19 },
+            { hours: '12', transfer_volume: '1477', transfer_time: 20 },
+            { hours: '13', transfer_volume: '1172', transfer_time: 21 },
+            { hours: '14', transfer_volume: '937', transfer_time: 20 },
+            { hours: '15', transfer_volume: '830', transfer_time: 17 },
+            { hours: '16', transfer_volume: '956', transfer_time: 16 },
+            { hours: '17', transfer_volume: '714', transfer_time: 16 },
+            { hours: '18', transfer_volume: '984', transfer_time: 17 },
+            { hours: '19', transfer_volume: '769', transfer_time: 17 },
+            { hours: '20', transfer_volume: '733', transfer_time: 18 },
+            { hours: '21', transfer_volume: '598', transfer_time: 19 },
+            { hours: '22', transfer_volume: '462', transfer_time: 21 },
+            { hours: '23', transfer_volume: '101', transfer_time: 14 }
+        ];
+
+        const svg = d3
+            .select('body')
+            .append('svg')
+            .attrs({
+                width: width + margin.left + margin.right,
+                height: height + margin.top + margin.bottom
+            });
+        const chart = svg.append('g').attr('transform', 'translate(0, 0)');
+
+        // Add the X Scale.
+        const xScale = d3
+            .scaleBand()
+            .domain(dataSet.map((d) => d.hours))
+            .range([margin.left, width - margin.right])
+            .padding(0.1);
+
+        // Add the Y Scale.
+        const yScaleLeft = d3
+            .scaleLinear()
+            .domain([0, d3.max(dataSet, (d) => d.transfer_time)])
+            .nice()
+            .range([height - margin.bottom, margin.top]);
+
+        const yScaleRight = d3
+            .scaleLinear()
+            .domain([0, d3.max(dataSet, (d) => +d.transfer_volume)])
+            .nice()
+            .range([height - margin.bottom, margin.top]);
+
+        // Add the X Axis.
+        svg
+            .append('g')
+            .attr('transform', `translate(0,${height - margin.bottom})`)
+            .call(d3.axisBottom(xScale).tickSizeOuter(0));
+
+        // Add the Y Axis.
+        svg
+            .append('g')
+            .attr('transform', `translate(${margin.left},0)`)
+            .call(d3.axisLeft(yScaleLeft));
+        svg
+            .append('g')
+            .attr('transform', `translate(${width - margin.right},0)`)
+            .call(d3.axisRight(yScaleRight));
+
+        // Text label for the x axis.
+        svg
+            .append('text')
+            .attrs({
+                x: width - margin.left - margin.right,
+                y: height
+            })
+            .styles({
+                'text-anchor': 'start'
+            })
+            .text('小時別(時)');
+
+        // yScaleLeft.
+        svg
+            .append('g')
+            .attr('class', 'y axis axisLeft')
+            .attr('transform', 'translate(0,0)')
+            .call(yScaleLeft);
+
+        svg
+            .append('text')
+            .attrs({
+                x: 8,
+                y: margin.top
+            })
+            .styles({
+                'writing-mode': 'tb'
+            })
+            .text('轉乘時間(分)');
+
+        // yScaleRight.
+        svg
+            .append('g')
+            .attr('class', 'y axis axisRight')
+            .attr('transform', 'translate(' + width + ',0)')
+            .call(yScaleRight);
+
+        svg
+            .append('text')
+            .attrs({
+                x: width + margin.right,
+                y: margin.top
+            })
+            .styles({
+                'writing-mode': 'tb'
+            })
+            .text('轉乘量(人次)');
+
+        const chartLabel = svg.append('g').attr('transform', `translate(${margin.left}, 0)`);
+
+        chartLabel.append('rect').attrs({
+            x: 0,
+            y: 0,
+            width: 200,
+            height: 20,
+            fill: '#21a2b0'
+        });
+
+        chartLabel
+            .append('text')
+            .attrs({
+                x: 5,
+                y: 10,
+                dy: '0.35em',
+                fill: '#fff'
+            })
+            .text('轉乘量與平均轉乘時間分析');
+
+        // Create bars.
+        const bars = chart
+            .selectAll('rect')
+            .data(dataSet)
+            .enter()
+            .append('rect');
+
+
+        bars.attrs({
+            fill: '#62bfaa',
+            x: (d) => xScale(d.hours),
+            y: height - margin.bottom,
+            width: xScale.bandwidth(),
+            height: 0
+        })
+            .transition()
+            .duration(800)
+            .attrs({
+                y: (d) => yScaleLeft(d.transfer_time),
+                height: (d) => yScaleLeft(0) - yScaleLeft(d.transfer_time),
+            });
+
+        // Create line
+        const line = d3
+            .line()
+            .x((d) => xScale(d.hours) + xScale.bandwidth() / 2)
+            .y((d) => yScaleRight(d.transfer_volume))
+            .curve(d3.curveMonotoneX); // apply smoothing to the line
+
+        chart
+            .append('path')
+            .datum(dataSet)
+            .attrs({
+                class: 'line',
+                d: line
+            });
+
+        chart
+            .selectAll('.dot')
+            .data(dataSet)
+            .enter()
+            .append('circle')
+            .attrs({
+                class: 'dot',
+                cx: (d) => xScale(d.hours) + xScale.bandwidth() / 2,
+                cy: (d) => yScaleRight(d.transfer_volume),
+                r: 5
+            })
+            .on('mouseover', handleMouseOver)
+            .on('mouseout', handleMouseOut);
+
+    </script>
+</body>
+
+</html>
