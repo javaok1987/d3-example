@@ -21,3 +21,9 @@ $ webpack-dev-server
 
 3.  Tree diagram (v4)[demo](https://javaok1987.github.io/d3-example/metro-stations.html)    
 ![Alt text](/img/treediagram.png "台北捷運-板南線")
+
+4. 長條圖 - 水平 (v5)[demo](https://javaok1987.github.io/d3-example/horizontal-bar-chart.html)    
+![Alt text]
+
+5. 長條圖 - 垂直 (v5)[demo](https://javaok1987.github.io/d3-example/vertical-bar-chart.html)    
+![Alt text]
