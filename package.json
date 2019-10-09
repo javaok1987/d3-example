@@ -1,7 +1,7 @@
 {
-  "name": "d3-drill",
-  "version": "1.0.0",
-  "description": "This was written using d3.js v4.",
+  "name": "d3-example",
+  "version": "2.0.0",
+  "description": "This was written using d3.js.",
   "main": "webpack.config.js",
   "scripts": {
     "dev": "webpack-dev-server",
@@ -10,9 +10,9 @@
   "author": "Ian Liao",
   "license": "ISC",
   "devDependencies": {
-    "webpack": "^4.39.2",
-    "webpack-cli": "^3.3.7",
-    "webpack-dev-server": "^3.8.0"
+    "webpack": "^4.41.0",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.2"
   },
   "dependencies": {
     "d3-tip": "^0.9.1"

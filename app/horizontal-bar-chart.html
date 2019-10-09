@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Horizontal Bar Chart</title>
+    <style lang="">
+
+    </style>
+</head>
+
+<body>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.min.js"></script>
+    <script>
+        const transitMap = {
+            '高鐵→高鐵': 110,
+            '公路客運→公車': 124,
+            '高鐵→公路客運': 47,
+            '公車→高鐵': 273,
+            '公路客運→公路客運': 17,
+            '臺鐵→公路客運': 304,
+            '公車→公路客運': 210,
+            '公路客運→高捷': 102,
+            '公路客運→高鐵': 43,
+            '高鐵→公車': 228
+        };
+
+        // Set the dimensions and margins of the graph.
+        const margin = {
+            top: 40,
+            right: 50,
+            bottom: 0,
+            left: 153
+        };
+
+        const BAR_HEIGHT = 20;
+        const GAP_BETWEEN_BAR = 5;
+
+        let chartWidth = 300;
+        let chartHeight = 0;
+
+        let svg, xScale, yScale, chart, bars;
+
+        const handleMouseOver = function (d, i) {
+            const $d = d3.select(this);
+            $d.attrs({
+                fill: '#4bb0dd'
+            });
+        };
+
+        const handleMouseOut = function (d, i) {
+            const $d = d3.select(this);
+
+            $d.attrs({
+                fill: '#62bfaa'
+            });
+        };
+        const drawBarChart = function (dataMap) {
+            let dataSet = [];
+            Object.keys(dataMap).map(function (objectKey) {
+                dataSet.push({
+                    x: dataMap[objectKey],
+                    y: objectKey
+                });
+            });
+
+            dataSet = dataSet.sort(function (a, b) {
+                return a.x > b.x ? 1 : -1;
+            });
+
+            chartHeight = (BAR_HEIGHT + GAP_BETWEEN_BAR) * dataSet.length;
+
+            svg = d3
+                .select('body')
+                .append('svg')
+                .attrs({
+                    width: chartWidth + margin.left + margin.right,
+                    height: chartHeight + margin.top + margin.bottom
+                });
+
+            xScale = d3
+                .scaleLinear()
+                .domain([0, d3.max(dataSet, d => d.x)])
+                .range([0, chartWidth]);
+
+            yScale = d3
+                .scaleBand()
+                .domain(dataSet.map(d => d.y))
+                .rangeRound([chartHeight, 0]);
+
+            // Add the Y Axis.
+            svg
+                .append('g')
+                .attrs({
+                    class: 'yAxis',
+                    transform: 'translate(150, 0)'
+                })
+                .call(
+                    d3
+                        .axisLeft(yScale)
+                        .ticks(0)
+                        .tickSizeOuter(0)
+                );
+
+            chart = svg.append('g').attr('transform', `translate(${margin.left}, 0)`);
+
+            // Text label for the x axis.
+            svg
+                .append('text')
+                .attrs({
+                    x: chartWidth - 20,
+                    y: chartHeight + BAR_HEIGHT
+                })
+                .style('text-anchor', 'start')
+                .text('轉乘量(人/次)');
+
+            // Text label for the y axis.
+            svg
+                .append('text')
+                .attrs({
+                    x: 8,
+                    y: chartHeight / 2
+                })
+                .styles({
+                    'writing-mode': 'tb'
+                })
+                .text('運具組合');
+
+            // Create bars.
+            bars = chart
+                .selectAll('rect')
+                .data(dataSet)
+                .enter()
+                .append('rect');
+
+            bars
+                .attrs({
+                    fill: '#62bfaa',
+                    width: 0,
+                    height: BAR_HEIGHT,
+                    x: 0,
+                    y: d => yScale(d.y)
+                })
+                .on('mouseover', handleMouseOver)
+                .on('mouseout', handleMouseOut)
+                .transition()
+                .duration(1500)
+                .attrs({
+                    width: d => Math.abs(xScale(d.x) - xScale(0))
+                });
+
+            chart
+                .selectAll('text')
+                .data(dataSet)
+                .enter()
+                .append('text')
+                .text('0')
+
+                .attrs({
+                    fill: '#1d2147',
+                    x: 5,
+                    y: d => yScale(d.y) + yScale.bandwidth() / 2
+                })
+                .styles({
+                    font: '12px sans-serif',
+                    'text-anchor': 'begin'
+                })
+                .transition()
+                .duration(1500)
+                .attrs({
+                    x: d => xScale(d.x) + 5
+                })
+                .tween('number', d => {
+                    const i = d3.interpolateRound(0, d.x);
+                    return function (t) {
+                        this.textContent = i(t);
+                    };
+                });
+        };
+
+        drawBarChart(transitMap);
+    </script>
+</body>
+
+</html>
